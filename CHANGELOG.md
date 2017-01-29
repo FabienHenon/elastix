@@ -1,3 +1,9 @@
+## 0.2.1
+
+### Improvements:
+
+  - add support for mappings
+
 ## 0.2.0
 
 ### Improvements:
