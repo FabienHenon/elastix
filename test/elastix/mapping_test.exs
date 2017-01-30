@@ -9,20 +9,20 @@ defmodule Elastix.MappingTest do
   @test_index2 Elastix.config(:test_index) <> "_2"
   @mapping %{
     properties: %{
-      user: %{type: "keyword"},
+      user: %{type: "integer"},
       post_date: %{type: "date"},
       message: %{type: "text"}
     }
   }
   @target_mapping %{
     "properties" => %{
-      "user" => %{"type" => "keyword"},
+      "user" => %{"type" => "integer"},
       "post_date" => %{"type" => "date"},
       "message" => %{"type" => "text"}
     }
   }
   @data %{
-    user: "örelbörel",
+    user: 12,
     post_date: "2009-11-15T14:12:12",
     message: "trying out Elasticsearch"
   }
