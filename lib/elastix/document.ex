@@ -27,8 +27,10 @@ defmodule Elastix.Document do
     |> process_response
   end
 
+  def get(elastic_url, index_name, type_name, ids, query_params \\ [])
+
   @doc false
-  def get(elastic_url, index_name, type_name, ids, query_params \\ []) when is_list(ids) do
+  def get(elastic_url, index_name, type_name, ids, query_params) when is_list(ids) do
     url = elastic_url <> make_path_mget(index_name, type_name, query_params)
 
     query = %{ids: Enum.map(ids, to_string/1)}
@@ -38,7 +40,7 @@ defmodule Elastix.Document do
   end
 
   @doc false
-  def get(elastic_url, index_name, type_name, id, query_params \\ []) do
+  def get(elastic_url, index_name, type_name, id, query_params) do
     elastic_url <> make_path(index_name, type_name, id, query_params)
     |> HTTP.get
     |> process_response
