@@ -33,7 +33,7 @@ defmodule Elastix.Document do
   def get(elastic_url, index_name, type_name, ids, query_params) when is_list(ids) do
     url = elastic_url <> make_path_mget(index_name, type_name, query_params)
 
-    query = %{ids: Enum.map(ids, to_string/1)}
+    query = %{ids: Enum.map(ids, &to_string(&1))}
 
     HTTP.request("GET", url, Poison.encode!(query))
     |> process_response
