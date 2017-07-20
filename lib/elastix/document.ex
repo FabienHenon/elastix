@@ -38,12 +38,7 @@ defmodule Elastix.Document do
   end
 
   @doc false
-  def get(elastic_url, index_name, type_name, id) do
-    get(elastic_url, index_name, type_name, id, [])
-  end
-
-  @doc false
-  def get(elastic_url, index_name, type_name, id, query_params) do
+  def get(elastic_url, index_name, type_name, id, query_params \\ []) do
     elastic_url <> make_path(index_name, type_name, id, query_params)
     |> HTTP.get
     |> process_response
