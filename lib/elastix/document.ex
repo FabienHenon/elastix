@@ -28,6 +28,16 @@ defmodule Elastix.Document do
   end
 
   @doc false
+  def get(elastic_url, index_name, type_name, ids, query_params \\ []) when is_list(ids) do
+    url = elastic_url <> make_path_mget(index_name, type_name, query_params)
+
+    query = %{ids: Enum.map(ids, to_string/1)}
+
+    HTTP.request("GET", url, Poison.encode!(query))
+    |> process_response
+  end
+
+  @doc false
   def get(elastic_url, index_name, type_name, id) do
     get(elastic_url, index_name, type_name, id, [])
   end
@@ -56,6 +66,16 @@ defmodule Elastix.Document do
   @doc false
   def make_path(index_name, type_name, id \\ nil, query_params) do
     path = "/#{index_name}/#{type_name}/#{id}"
+
+    case query_params do
+      [] -> path
+      _ -> add_query_params(path, query_params)
+    end
+  end
+
+  @doc false
+  def make_path_mget(index_name, type_name, query_params) do
+    path = "/#{index_name}/#{type_name}/_mget"
 
     case query_params do
       [] -> path
