@@ -44,6 +44,41 @@ defmodule Elastix.Index do
   end
 
   @doc false
+  def new_aliases(elastic_url, body) do
+    elastic_url <> "/_aliases"
+    |> HTTP.post(Poison.encode!(body))
+    |> process_response
+  end
+
+  @doc false
+  def create_alias(elastic_url, index, alias_name, body \\ %{}) do
+    elastic_url <> "/#{index}/_alias/#{alias_name}"
+    |> HTTP.put(Poison.encode!(body))
+    |> process_response
+  end
+
+  @doc false
+  def delete_alias(elastic_url, index, alias_name) do
+    elastic_url <> "/#{index}/_alias/#{alias_name}"
+    |> HTTP.delete
+    |> process_response
+  end
+
+  @doc false
+  def get_alias(elastic_url, index, alias_name) do
+    elastic_url <> "/#{index}/_alias/#{alias_name}"
+    |> HTTP.get
+    |> process_response
+  end
+
+  @doc false
+  def get_alias(elastic_url, alias_name) do
+    elastic_url <> "/_alias/#{alias_name}"
+    |> HTTP.get
+    |> process_response
+  end
+
+  @doc false
   def make_path(name) do
     "/#{name}"
   end
