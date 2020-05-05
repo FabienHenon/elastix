@@ -17,12 +17,24 @@ defmodule Elastix.Document do
 
   @doc false
   def update(elastic_url, index_name, type_name, id, data) do
-    index(elastic_url, index_name, type_name, id, data, [])
+    update(elastic_url, index_name, type_name, id, data, [])
   end
 
   @doc false
   def update(elastic_url, index_name, type_name, id, data, query_params) do
     (elastic_url <> make_path_update(index_name, type_name, id, query_params))
+    |> HTTP.post(Poison.encode!(data))
+    |> process_response
+  end
+
+  @doc false
+  def update_by_query(elastic_url, index_name, type_name, data) do
+    update_by_query(elastic_url, index_name, type_name, data, [])
+  end
+
+  @doc false
+  def update_by_query(elastic_url, index_name, type_name, data, query_params) do
+    (elastic_url <> make_path_update_by_query(index_name, type_name, query_params))
     |> HTTP.post(Poison.encode!(data))
     |> process_response
   end
@@ -85,6 +97,16 @@ defmodule Elastix.Document do
   @doc false
   def make_path_update(index_name, type_name, id \\ nil, query_params) do
     path = "/#{index_name}/#{type_name}/#{id}/_update"
+
+    case query_params do
+      [] -> path
+      _ -> add_query_params(path, query_params)
+    end
+  end
+
+  @doc false
+  def make_path_update_by_query(index_name, type_name, query_params) do
+    path = "/#{index_name}/#{type_name}/_update_by_query"
 
     case query_params do
       [] -> path
